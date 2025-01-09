@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DndManager.Pages.MasterMainPage"
+             Title="MasterMainPage">
+    <ScrollView>
+        <VerticalStackLayout
+        Padding="30,0"
+        Spacing="25">
+            <Button
+                Text="Start Session" 
+                HorizontalOptions="Fill" 
+                Command="{Binding StartSessionComand}"/>
+
+            <Button
+                Text="Create Campaign" 
+                HorizontalOptions="Fill" 
+                Command="{Binding CreateCampaignCommand}"/>
+
+            <Button
+                Text="Browse Campaigns" 
+                HorizontalOptions="Fill" 
+                Command="{Binding BrowseCampaignsCommand}"/>
+
+            <Button
+                Text="Create Enemy" 
+                HorizontalOptions="Fill" 
+                Command="{Binding CreateEnemyCommand}"/>
+            <Button
+                Text="Create Encounter" 
+                HorizontalOptions="Fill" 
+                Command="{Binding CreateEncounterCommand}"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

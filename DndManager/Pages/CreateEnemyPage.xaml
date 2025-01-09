@@ -1,0 +1,992 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DndManager.Pages.CreateEnemyPage"
+             x:Name="CreateEnemyPageRoot"
+             Title="CreateEnemyPage"
+             xmlns:converters="clr-namespace:DndManager.Converters">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <converters:NegBooleanToVisibilityConverter x:Key="NegBooleanToVisibilityConverter" />
+            <Style x:Key="CenteredBoldLabelStyle" TargetType="Label">
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="Margin" Value="0,0,0,1"/>
+            </Style>
+            <Style x:Key="AbilityScoreEntryStyle" TargetType="Entry">
+                <Setter Property="Keyboard" Value="Numeric" />
+                <Setter Property="MaximumWidthRequest" Value="40" />
+                <Setter Property="HorizontalTextAlignment" Value="Center" />
+                <Setter Property="MaxLength" Value="2" />
+            </Style>
+            <Style x:Key="ItemLabel" TargetType="Label">
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="Margin" Value="0,0,0,0"/>
+            </Style>
+            <Style x:Key="ItemLabelBold" TargetType="Label">
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="Margin" Value="0,0,0,0"/>
+            </Style>
+            <Style x:Key="RollLabel" TargetType="Label">
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="FontSize" Value="20"/>
+            </Style>
+            <Style x:Key="RollLabelBold" TargetType="Label">
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="FontSize" Value="20"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="10" Spacing="10">
+            
+            <Border Stroke="Black" BackgroundColor="#EEEEEE" Padding="10">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10,10,10,10" />
+                </Border.StrokeShape>
+                <FlexLayout Direction="Row" VerticalOptions="Center">
+                    <Label Text="Enemy is monster" FontSize="20" FontAttributes="Bold" VerticalOptions="Center"/>
+                    <Switch IsToggled="{Binding IsMonster}" FlexLayout.Grow="1" VerticalOptions="Center"/>
+                </FlexLayout>
+            </Border>
+            <!-- Character Info -->
+            <Border Stroke="Black" BackgroundColor="#EEEEEE" Padding="10" IsVisible="{Binding IsMonster, Converter={StaticResource BooleanToVisibilityConverter}}">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10,10,10,10" />
+                </Border.StrokeShape>
+                <VerticalStackLayout>
+                    <Label Text="Enemy Info" FontSize="20" FontAttributes="Bold"/>
+                    <Border Stroke="Gray" StrokeThickness="1" Padding="0" BackgroundColor="White">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10,10,10,10" />
+                        </Border.StrokeShape>
+                        <VerticalStackLayout>
+                            <FlexLayout Direction="Row" VerticalOptions="Center">
+                                <Label Text="Name:" Style="{StaticResource CenteredBoldLabelStyle}"/>
+                                <Entry Placeholder="Name" Text="{Binding Enemy.Name}" FlexLayout.Grow="1"/>
+                            </FlexLayout>
+                            <BoxView HeightRequest="1" BackgroundColor="Gray" />
+                            <FlexLayout Direction="Row" VerticalOptions="Center">
+                                <Label Text="Race:" Style="{StaticResource CenteredBoldLabelStyle}"/>
+                                <Entry Placeholder="Race" Text="{Binding Enemy.Race}" FlexLayout.Grow="1"/>
+                            </FlexLayout>
+                            <BoxView HeightRequest="1" BackgroundColor="Gray" />
+                            <FlexLayout Direction="Row" VerticalOptions="Center">
+                                <Label Text="Class:" Style="{StaticResource CenteredBoldLabelStyle}"/>
+                                <Entry Placeholder="Class" Text="{Binding Enemy.Class}" FlexLayout.Grow="8"/>
+                            </FlexLayout>
+                            <BoxView HeightRequest="1" BackgroundColor="Gray" />
+                            <FlexLayout Direction="Row" VerticalOptions="Center">
+                                <Label Text="Subclass:" Style="{StaticResource CenteredBoldLabelStyle}"/>
+                                <Entry Placeholder="Subclass" Text="{Binding Enemy.Subclass}" FlexLayout.Grow="2"/>
+                            </FlexLayout>
+                            <BoxView HeightRequest="1" BackgroundColor="Gray" />
+                            <FlexLayout Direction="Row" VerticalOptions="Center">
+                                <Label Text="Hit Points Max:" Style="{StaticResource CenteredBoldLabelStyle}"/>
+                                <Entry Placeholder="max HP" Text="{Binding Enemy.HitPointsMax}" Keyboard="Numeric" FlexLayout.Grow="4"/>
+                                <BoxView WidthRequest="1" BackgroundColor="Gray" Margin="0,0,1,0"/>
+                                <Label Text="Level:" Style="{StaticResource CenteredBoldLabelStyle}"/>
+                                <Entry Placeholder="Level" Text="{Binding Enemy.Level}" Keyboard="Numeric" FlexLayout.Grow="2"
+                               HorizontalTextAlignment="Center" MaxLength="2"/>
+                            </FlexLayout>
+                            <BoxView HeightRequest="1" BackgroundColor="Gray" />
+                            <FlexLayout Direction="Row" VerticalOptions="Center">
+                                <Label Text="Alignment:" Style="{StaticResource CenteredBoldLabelStyle}"/>
+                                <Entry Placeholder="Alignment" Text="{Binding Enemy.Alignment}" FlexLayout.Grow="3"/>
+                            </FlexLayout>
+                            <BoxView HeightRequest="1" BackgroundColor="Gray" />
+                            <FlexLayout Direction="Row" VerticalOptions="Center">
+                                <Label Text="Background:" Style="{StaticResource CenteredBoldLabelStyle}"/>
+                                <Entry Placeholder="Background" Text="{Binding Enemy.Background}" FlexLayout.Grow="2"/>
+                            </FlexLayout>
+                            <BoxView HeightRequest="1" BackgroundColor="Gray" />
+                            <Label Text="Notes:" Style="{StaticResource CenteredBoldLabelStyle}"/>
+                            <Editor Placeholder="Notes" Text="{Binding Enemy.Notes}" FlexLayout.Grow="2" AutoSize="TextChanges"/>
+                            <BoxView HeightRequest="1" BackgroundColor="Gray" />
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Monster Info -->
+            <Border Stroke="Black" BackgroundColor="#EEEEEE" Padding="10" IsVisible="{Binding IsMonster, Converter={StaticResource NegBooleanToVisibilityConverter}}">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10,10,10,10" />
+                </Border.StrokeShape>
+                <VerticalStackLayout>
+                    <Label Text="Monster Info" FontSize="20" FontAttributes="Bold"/>
+                    <Border Stroke="Gray" StrokeThickness="1" Padding="0" BackgroundColor="White">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10,10,10,10" />
+                        </Border.StrokeShape>
+                        <VerticalStackLayout>
+                            <FlexLayout Direction="Row" VerticalOptions="Center">
+                                <Label Text="Name:" Style="{StaticResource CenteredBoldLabelStyle}"/>
+                                <Entry Placeholder="Name" Text="{Binding Enemy.Name}" FlexLayout.Grow="1"/>
+                            </FlexLayout>
+                            <BoxView HeightRequest="1" BackgroundColor="Gray" />
+                            <FlexLayout Direction="Row" VerticalOptions="Center">
+                                <Label Text="Race:" Style="{StaticResource CenteredBoldLabelStyle}"/>
+                                <Entry Placeholder="Race" Text="{Binding Enemy.Race}" FlexLayout.Grow="1"/>
+                            </FlexLayout>
+                            <BoxView HeightRequest="1" BackgroundColor="Gray" />
+                            <FlexLayout Direction="Row" VerticalOptions="Center">
+                                <Label Text="Hit Points Max:" Style="{StaticResource CenteredBoldLabelStyle}"/>
+                                <Entry Placeholder="max HP" Text="{Binding Enemy.HitPointsMax}" Keyboard="Numeric" FlexLayout.Grow="4"/>
+                                <BoxView WidthRequest="1" BackgroundColor="Gray" Margin="0,0,1,0"/>
+                                <Label Text="Level:" Style="{StaticResource CenteredBoldLabelStyle}"/>
+                                <Entry Placeholder="Level" Text="{Binding Enemy.Level}" Keyboard="Numeric" FlexLayout.Grow="2"
+                                        HorizontalTextAlignment="Center" MaxLength="2"/>
+                            </FlexLayout>
+                            <BoxView HeightRequest="1" BackgroundColor="Gray" />
+                            <FlexLayout Direction="Row" VerticalOptions="Center">
+                                <Label Text="Armor Class:" Style="{StaticResource CenteredBoldLabelStyle}"/>
+                                <Entry Placeholder="AC" Text="{Binding Enemy.ArmorClass}" Keyboard="Numeric" FlexLayout.Grow="1"/>
+                                <BoxView WidthRequest="1" BackgroundColor="Gray" Margin="0,0,1,0"/>
+                                <Label Text="Speed:" Style="{StaticResource CenteredBoldLabelStyle}"/>
+                                <Entry Placeholder="ft" Text="{Binding Enemy.Speed}" Keyboard="Numeric" FlexLayout.Grow="1"
+                                       HorizontalTextAlignment="Center" MaxLength="2"/>
+                            </FlexLayout>
+                            <BoxView HeightRequest="1" BackgroundColor="Gray" />
+                            <FlexLayout Direction="Row" VerticalOptions="Center">
+                                <Label Text="Alignment:" Style="{StaticResource CenteredBoldLabelStyle}"/>
+                                <Entry Placeholder="Alignment" Text="{Binding Enemy.Alignment}" FlexLayout.Grow="3"/>
+                            </FlexLayout>
+                            <BoxView HeightRequest="1" BackgroundColor="Gray" />
+                            <Label Text="Notes:" Style="{StaticResource CenteredBoldLabelStyle}"/>
+                            <Editor Placeholder="Notes" Text="{Binding Enemy.Notes}" FlexLayout.Grow="2" AutoSize="TextChanges"/>
+                            <BoxView HeightRequest="1" BackgroundColor="Gray" />
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Ability Scores -->
+            <Label Text="Ability Scores" FontSize="20" FontAttributes="Bold" />
+            <Border Padding="5" StrokeThickness="1" Stroke="Gray">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10,10,10,10" />
+                </Border.StrokeShape>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="3*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <VerticalStackLayout Grid.Column="0">
+                        <FlexLayout Direction="Row" HorizontalOptions="Fill" Margin="0,0,0,5">
+                            <Label FlexLayout.Grow="1" VerticalOptions="Center" HorizontalOptions="Start" Margin="0,0,5,0">Strength:</Label>
+                            <Border Padding="0" StrokeThickness="1" Background="#efefef">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="40,0,0,40" />
+                                </Border.StrokeShape>
+                                <Entry Placeholder="STR" Text="{Binding Enemy.Strength}" Style="{StaticResource AbilityScoreEntryStyle}"/>
+                            </Border>
+                        </FlexLayout>
+                        <FlexLayout Direction="Row" HorizontalOptions="Fill" Margin="0,0,0,5">
+                            <Label FlexLayout.Grow="1" VerticalOptions="Center" Margin="0,0,5,0">Dexterity:</Label>
+                            <Border Padding="0" StrokeThickness="1" Background="#efefef">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="40,0,0,40" />
+                                </Border.StrokeShape>
+                                <Entry Placeholder="DEX" Text="{Binding Enemy.Dexterity}" Style="{StaticResource AbilityScoreEntryStyle}"/>
+                            </Border>
+                        </FlexLayout>
+                        <FlexLayout Direction="Row" HorizontalOptions="Fill" Margin="0,0,0,5">
+                            <Label FlexLayout.Grow="1" VerticalOptions="Center" Margin="0,0,5,0">Constitution:</Label>
+                            <Border Padding="0" StrokeThickness="1" Background="#efefef">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="40,0,0,40" />
+                                </Border.StrokeShape>
+                                <Entry Placeholder="CON" Text="{Binding Enemy.Constitution}" Style="{StaticResource AbilityScoreEntryStyle}"/>
+                            </Border>
+                        </FlexLayout>
+                        <FlexLayout Direction="Row" HorizontalOptions="Fill" Margin="0,0,0,5">
+                            <Label FlexLayout.Grow="1" VerticalOptions="Center" Margin="0,0,5,0">Intelligence:</Label>
+                            <Border Padding="0" StrokeThickness="1" Background="#efefef">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="40,0,0,40" />
+                                </Border.StrokeShape>
+                                <Entry Placeholder="INT" Text="{Binding Enemy.Intelligence}" Style="{StaticResource AbilityScoreEntryStyle}"/>
+                            </Border>
+                        </FlexLayout>
+                        <FlexLayout Direction="Row" HorizontalOptions="Fill" Margin="0,0,0,5">
+                            <Label FlexLayout.Grow="1" VerticalOptions="Center" Margin="0,0,5,0">Wisdom:</Label>
+                            <Border Padding="0" StrokeThickness="1" Background="#efefef">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="40,0,0,40" />
+                                </Border.StrokeShape>
+                                <Entry Placeholder="WIS" Text="{Binding Enemy.Wisdom}" Style="{StaticResource AbilityScoreEntryStyle}"/>
+                            </Border>
+                        </FlexLayout>
+                        <FlexLayout Direction="Row" HorizontalOptions="Fill" Margin="0,0,0,5">
+                            <Label FlexLayout.Grow="1" VerticalOptions="Center" Margin="0,0,5,0">Charisma:</Label>
+                            <Border Padding="0" StrokeThickness="1" Background="#efefef">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="40,0,0,40" />
+                                </Border.StrokeShape>
+                                <Entry Placeholder="CHA" Text="{Binding Enemy.Charisma}" Style="{StaticResource AbilityScoreEntryStyle}"/>
+                            </Border>
+                        </FlexLayout>
+                    </VerticalStackLayout>
+                    <VerticalStackLayout Grid.Column="1" Margin="5,0">
+                        <FlexLayout Direction="Row" HorizontalOptions="Fill" Margin="0,0,0,5">
+                            <Label FlexLayout.Grow="1" VerticalOptions="Center" HorizontalOptions="End" Margin="0,0,5,0">ST Proficiency:</Label>
+                            <Switch IsToggled="{Binding IsStrengthProficient}" VerticalOptions="Center"/>
+                        </FlexLayout>
+                        <FlexLayout Direction="Row" HorizontalOptions="Fill" Margin="0,0,0,5">
+                            <Label FlexLayout.Grow="1" VerticalOptions="Center" HorizontalOptions="End" Margin="0,0,5,0">ST Proficiency:</Label>
+                            <Switch IsToggled="{Binding IsDexterityProficient}" VerticalOptions="Center"/>
+                        </FlexLayout>
+                        <FlexLayout Direction="Row" HorizontalOptions="Fill" Margin="0,0,0,5">
+                            <Label FlexLayout.Grow="1" VerticalOptions="Center" HorizontalOptions="End" Margin="0,0,5,0">ST Proficiency:</Label>
+                            <Switch IsToggled="{Binding IsConstitutionProficient}" VerticalOptions="Center"/>
+                        </FlexLayout>
+                        <FlexLayout Direction="Row" HorizontalOptions="Fill" Margin="0,0,0,5">
+                            <Label FlexLayout.Grow="1" VerticalOptions="Center" HorizontalOptions="End" Margin="0,0,5,0">ST Proficiency:</Label>
+                            <Switch IsToggled="{Binding IsIntelligenceProficient}" VerticalOptions="Center"/>
+                        </FlexLayout>
+                        <FlexLayout Direction="Row" HorizontalOptions="Fill" Margin="0,0,0,5">
+                            <Label FlexLayout.Grow="1" VerticalOptions="Center" HorizontalOptions="End" Margin="0,0,5,0">ST Proficiency:</Label>
+                            <Switch IsToggled="{Binding IsWisdomProficient}" VerticalOptions="Center"/>
+                        </FlexLayout>
+                        <FlexLayout Direction="Row" HorizontalOptions="Fill" Margin="0,0,0,5">
+                            <Label FlexLayout.Grow="1" VerticalOptions="Center" HorizontalOptions="End" Margin="0,0,5,0">ST Proficiency:</Label>
+                            <Switch IsToggled="{Binding IsCharismaProficient}" VerticalOptions="Center"/>
+                        </FlexLayout>
+                    </VerticalStackLayout>
+                </Grid>
+            </Border>
+
+            <!-- Languages -->
+            <Label Text="Languages and Proficiencies" FontSize="20" FontAttributes="Bold" />
+            <Border Padding="5">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10,10,10,10" />
+                </Border.StrokeShape>
+                <VerticalStackLayout>
+                    <FlexLayout Direction="Row">
+                        <Label Text="Languages" VerticalOptions="Center" Margin="0,0,0,1" FontSize="16" FontAttributes="Bold" FlexLayout.Grow="1"/>
+                        <BoxView WidthRequest="1" BackgroundColor="Gray" Margin="5,0,0,0"/>
+                        <Entry Placeholder="Add Language" Text="{Binding NewLanguage}" FlexLayout.Grow="1"/>
+                        <Button Text="+" 
+                            Command="{Binding AddLanguageCommand}"
+                            HeightRequest="30"
+                            WidthRequest="30"
+                            Padding="0"
+                            Margin="0,0,5,0"
+                            FlexLayout.AlignSelf="Center"/>
+                    </FlexLayout>
+                    <BoxView HeightRequest="1" BackgroundColor="Gray" />
+                    <Border Margin="0,5" BackgroundColor="#EEEEEE">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10,10,10,10" />
+                        </Border.StrokeShape>
+                        <VerticalStackLayout>
+                            <CollectionView ItemsSource="{Binding Languages}" SelectionMode="None">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Padding="3">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="10,10,10,10" />
+                                            </Border.StrokeShape>
+                                            <VerticalStackLayout>
+                                                <FlexLayout Direction="Row" HeightRequest="40">
+                                                    <Label Text="{Binding .}" VerticalOptions="Center" FlexLayout.Grow="1" Margin="2,0,0,0"/>
+                                                    <Button Text="-" 
+                                                    Command="{Binding BindingContext.RemoveLanguageCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}" 
+                                                    CommandParameter="{Binding .}"
+                                                    HeightRequest="30"
+                                                    WidthRequest="30"
+                                                    Padding="0"
+                                                    Margin="0,0,5,0"
+                                                    FlexLayout.AlignSelf="Center"/>
+                                                </FlexLayout>
+                                            </VerticalStackLayout>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Skill Proficiencies -->
+            <Border Padding="5">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10,10,10,10" />
+                </Border.StrokeShape>
+                <VerticalStackLayout>
+                    <FlexLayout Direction="Row">
+                        <Label Text="Skill Proficiencies" VerticalOptions="Center" Margin="0,0,0,1" FontSize="16" FontAttributes="Bold" FlexLayout.Grow="1"/>
+                        <BoxView WidthRequest="1" BackgroundColor="Gray" Margin="5,0,0,0"/>
+                        <Entry Placeholder="Add Proficiency" Text="{Binding NewSkillProficiency}" FlexLayout.Grow="1"/>
+                        <Button Text="+" 
+                            Command="{Binding AddSkillProficiencyCommand}"
+                            HeightRequest="30"
+                            WidthRequest="30"
+                            Padding="0"
+                            Margin="0,0,5,0"
+                            FlexLayout.AlignSelf="Center"/>
+                    </FlexLayout>
+                    <BoxView HeightRequest="1" BackgroundColor="Gray" />
+                    <Border Margin="0,5" BackgroundColor="#EEEEEE">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10,10,10,10" />
+                        </Border.StrokeShape>
+                        <VerticalStackLayout>
+                            <CollectionView ItemsSource="{Binding SkillProficiencies}" SelectionMode="None">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Padding="3">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="10,10,10,10" />
+                                            </Border.StrokeShape>
+                                            <VerticalStackLayout>
+                                                <FlexLayout Direction="Row" HeightRequest="40">
+                                                    <Label Text="{Binding .}" VerticalOptions="Center" FlexLayout.Grow="1" Margin="2,0,0,0"/>
+                                                    <Button Text="-" 
+                                                    Command="{Binding BindingContext.RemoveSkillProficiencyCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}" 
+                                                    CommandParameter="{Binding .}"
+                                                    HeightRequest="30"
+                                                    WidthRequest="30"
+                                                    Padding="0"
+                                                    Margin="0,0,5,0"
+                                                    FlexLayout.AlignSelf="Center"/>
+                                                </FlexLayout>
+                                            </VerticalStackLayout>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Skill Expertises -->
+            <Border Padding="5">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10,10,10,10" />
+                </Border.StrokeShape>
+                <VerticalStackLayout>
+                    <FlexLayout Direction="Row">
+                        <Label Text="Skill Expertises" VerticalOptions="Center" Margin="0,0,0,1" FontSize="16" FontAttributes="Bold" FlexLayout.Grow="1"/>
+                        <BoxView WidthRequest="1" BackgroundColor="Gray" Margin="5,0,0,0"/>
+                        <Entry Placeholder="Add Expertise" Text="{Binding NewSkillExpertise}" FlexLayout.Grow="1"/>
+                        <Button Text="+" 
+                Command="{Binding AddSkillExpertiseCommand}"
+                HeightRequest="30"
+                WidthRequest="30"
+                Padding="0"
+                Margin="0,0,5,0"
+                FlexLayout.AlignSelf="Center"/>
+                    </FlexLayout>
+                    <BoxView HeightRequest="1" BackgroundColor="Gray" />
+                    <Border Margin="0,5" BackgroundColor="#EEEEEE">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10,10,10,10" />
+                        </Border.StrokeShape>
+                        <VerticalStackLayout>
+                            <CollectionView ItemsSource="{Binding SkillExpertises}" SelectionMode="None">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Padding="3">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="10,10,10,10" />
+                                            </Border.StrokeShape>
+                                            <VerticalStackLayout>
+                                                <FlexLayout Direction="Row" HeightRequest="40">
+                                                    <Label Text="{Binding .}" VerticalOptions="Center" FlexLayout.Grow="1" Margin="2,0,0,0"/>
+                                                    <Button Text="-" 
+                                        Command="{Binding BindingContext.RemoveSkillExpertiseCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}" 
+                                        CommandParameter="{Binding .}"
+                                        HeightRequest="30"
+                                        WidthRequest="30"
+                                        Padding="0"
+                                        Margin="0,0,5,0"
+                                        FlexLayout.AlignSelf="Center"/>
+                                                </FlexLayout>
+                                            </VerticalStackLayout>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Vulnerabilities -->
+            <Border Padding="5">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10,10,10,10" />
+                </Border.StrokeShape>
+                <VerticalStackLayout>
+                    <FlexLayout Direction="Row">
+                        <Label Text="Vulnerabilities" VerticalOptions="Center" Margin="0,0,0,1" FontSize="16" FontAttributes="Bold" FlexLayout.Grow="1"/>
+                        <BoxView WidthRequest="1" BackgroundColor="Gray" Margin="5,0,0,0"/>
+                        <Entry Placeholder="Add Vulnerability" Text="{Binding NewVulnerability}" FlexLayout.Grow="1"/>
+                        <Button Text="+" 
+                                Command="{Binding AddVulnerabilityCommand}"
+                                HeightRequest="30"
+                                WidthRequest="30"
+                                Padding="0"
+                                Margin="0,0,5,0"
+                                FlexLayout.AlignSelf="Center"/>
+                    </FlexLayout>
+                    <BoxView HeightRequest="1" BackgroundColor="Gray" />
+                    <Border Margin="0,5" BackgroundColor="#EEEEEE">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10,10,10,10" />
+                        </Border.StrokeShape>
+                        <VerticalStackLayout>
+                            <CollectionView ItemsSource="{Binding Vulnerabilities}" SelectionMode="None">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Padding="3">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="10,10,10,10" />
+                                            </Border.StrokeShape>
+                                            <VerticalStackLayout>
+                                                <FlexLayout Direction="Row" HeightRequest="40">
+                                                    <Label Text="{Binding .}" VerticalOptions="Center" FlexLayout.Grow="1" Margin="2,0,0,0"/>
+                                                    <Button Text="-" 
+                                                            Command="{Binding BindingContext.RemoveVulnerabilityCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}" 
+                                                            CommandParameter="{Binding .}"
+                                                            HeightRequest="30"
+                                                            WidthRequest="30"
+                                                            Padding="0"
+                                                            Margin="0,0,5,0"
+                                                            FlexLayout.AlignSelf="Center"/>
+                                                </FlexLayout>
+                                            </VerticalStackLayout>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Damage Resistances -->
+            <Border Padding="5">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10,10,10,10" />
+                </Border.StrokeShape>
+                <VerticalStackLayout>
+                    <FlexLayout Direction="Row">
+                        <Label Text="Damage Resistances" VerticalOptions="Center" Margin="0,0,0,1" FontSize="14" FontAttributes="Bold" FlexLayout.Grow="1"/>
+                        <BoxView WidthRequest="1" BackgroundColor="Gray" Margin="5,0,0,0"/>
+                        <Entry Placeholder="Add Resistance" Text="{Binding NewDamageResistance}" FlexLayout.Grow="1"/>
+                        <Button Text="+" 
+                                Command="{Binding AddDamageResistanceCommand}"
+                                HeightRequest="30"
+                                WidthRequest="30"
+                                Padding="0"
+                                Margin="0,0,5,0"
+                                FlexLayout.AlignSelf="Center"/> 
+                    </FlexLayout>
+                    <BoxView HeightRequest="1" BackgroundColor="Gray" />
+                    <Border Margin="0,5" BackgroundColor="#EEEEEE">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10,10,10,10" />
+                        </Border.StrokeShape>
+                        <VerticalStackLayout>
+                            <CollectionView ItemsSource="{Binding DamageResistances}" SelectionMode="None">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Padding="3">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="10,10,10,10" />
+                                            </Border.StrokeShape>
+                                            <VerticalStackLayout>
+                                                <FlexLayout Direction="Row" HeightRequest="40">
+                                                    <Label Text="{Binding .}" VerticalOptions="Center" FlexLayout.Grow="1" Margin="2,0,0,0"/>
+                                                    <Button Text="-" 
+                                                Command="{Binding BindingContext.RemoveDamageResistanceCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}" 
+                                                CommandParameter="{Binding .}"
+                                                HeightRequest="30"
+                                                WidthRequest="30"
+                                                Padding="0"
+                                                Margin="0,0,5,0"
+                                                FlexLayout.AlignSelf="Center"/>
+                                                </FlexLayout>
+                                            </VerticalStackLayout>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Damage Immunities -->
+            <Border Padding="5">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10,10,10,10" />
+                </Border.StrokeShape>
+                <VerticalStackLayout>
+                    <FlexLayout Direction="Row">
+                        <Label Text="Damage Immunities" VerticalOptions="Center" Margin="0,0,0,1" FontSize="14" FontAttributes="Bold" FlexLayout.Grow="1"/>
+                        <BoxView WidthRequest="1" BackgroundColor="Gray" Margin="5,0,0,0"/>
+                        <Entry Placeholder="Add Immunity" Text="{Binding NewDamageImmunity}" FlexLayout.Grow="1"/>
+                        <Button Text="+" 
+                                Command="{Binding AddDamageImmunityCommand}"
+                                HeightRequest="30"
+                                WidthRequest="30"
+                                Padding="0"
+                                Margin="0,0,5,0"
+                                FlexLayout.AlignSelf="Center"/>
+                    </FlexLayout>
+                    <BoxView HeightRequest="1" BackgroundColor="Gray" />
+                    <Border Margin="0,5" BackgroundColor="#EEEEEE">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10,10,10,10" />
+                        </Border.StrokeShape>
+                        <VerticalStackLayout>
+                            <CollectionView ItemsSource="{Binding DamageImmunities}" SelectionMode="None">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Padding="3">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="10,10,10,10" />
+                                            </Border.StrokeShape>
+                                            <VerticalStackLayout>
+                                                <FlexLayout Direction="Row" HeightRequest="40">
+                                                    <Label Text="{Binding .}" VerticalOptions="Center" FlexLayout.Grow="1" Margin="2,0,0,0"/>
+                                                    <Button Text="-" 
+                                    Command="{Binding BindingContext.RemoveDamageImmunityCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}" 
+                                    CommandParameter="{Binding .}"
+                                    HeightRequest="30"
+                                    WidthRequest="30"
+                                    Padding="0"
+                                    Margin="0,0,5,0"
+                                    FlexLayout.AlignSelf="Center"/>
+                                                </FlexLayout>
+                                            </VerticalStackLayout>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+            </Border>
+            
+            <!-- Condition Immunities -->
+            <Border Padding="5">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10,10,10,10" />
+                </Border.StrokeShape>
+                <VerticalStackLayout>
+                    <FlexLayout Direction="Row">
+                        <Label Text="Condition Immunities" VerticalOptions="Center" Margin="0,0,0,1" FontSize="13" FontAttributes="Bold" FlexLayout.Grow="1"/>
+                        <BoxView WidthRequest="1" BackgroundColor="Gray" Margin="5,0,0,0"/>
+                        <Entry Placeholder="Add Immunity" Text="{Binding NewConditionImmunity}" FlexLayout.Grow="1"/>
+                        <Button Text="+" 
+                                Command="{Binding AddConditionImmunityCommand}"
+                                HeightRequest="30"
+                                WidthRequest="30"
+                                Padding="0"
+                                Margin="0,0,5,0"
+                                FlexLayout.AlignSelf="Center"/>
+                    </FlexLayout>
+                    <BoxView HeightRequest="1" BackgroundColor="Gray" />
+                    <Border Margin="0,5" BackgroundColor="#EEEEEE">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10,10,10,10" />
+                        </Border.StrokeShape>
+                        <VerticalStackLayout>
+                            <CollectionView ItemsSource="{Binding ConditionImmunities}" SelectionMode="None">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Padding="3">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="10,10,10,10" />
+                                            </Border.StrokeShape>
+                                            <VerticalStackLayout>
+                                                <FlexLayout Direction="Row" HeightRequest="40">
+                                                    <Label Text="{Binding .}" VerticalOptions="Center" FlexLayout.Grow="1" Margin="2,0,0,0"/>
+                                                    <Button Text="-" 
+                                    Command="{Binding BindingContext.RemoveConditionImmunityCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}" 
+                                    CommandParameter="{Binding .}"
+                                    HeightRequest="30"
+                                    WidthRequest="30"
+                                    Padding="0"
+                                    Margin="0,0,5,0"
+                                    FlexLayout.AlignSelf="Center"/>
+                                                </FlexLayout>
+                                            </VerticalStackLayout>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+            </Border>
+
+
+            <!-- Senses -->
+            <Border Padding="5">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10,10,10,10" />
+                </Border.StrokeShape>
+                <VerticalStackLayout>
+                    <FlexLayout Direction="Row">
+                        <Label Text="Senses" VerticalOptions="Center" Margin="0,0,0,1" FontSize="16" FontAttributes="Bold" FlexLayout.Grow="1"/>
+                        <BoxView WidthRequest="1" BackgroundColor="Gray" Margin="5,0,0,0"/>
+                        <Entry Placeholder="Add Sense" Text="{Binding NewSense}" FlexLayout.Grow="1"/>
+                        <Button Text="+" 
+                                Command="{Binding AddSenseCommand}"
+                                HeightRequest="30"
+                                WidthRequest="30"
+                                Padding="0"
+                                Margin="0,0,5,0"
+                                FlexLayout.AlignSelf="Center"/>
+                    </FlexLayout>
+                    <BoxView HeightRequest="1" BackgroundColor="Gray" />
+                    <Border Margin="0,5" BackgroundColor="#EEEEEE">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10,10,10,10" />
+                        </Border.StrokeShape>
+                        <VerticalStackLayout>
+                            <CollectionView ItemsSource="{Binding Senses}" SelectionMode="None">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Padding="3">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="10,10,10,10" />
+                                            </Border.StrokeShape>
+                                            <VerticalStackLayout>
+                                                <FlexLayout Direction="Row" HeightRequest="40">
+                                                    <Label Text="{Binding .}" VerticalOptions="Center" FlexLayout.Grow="1" Margin="2,0,0,0"/>
+                                                    <Button Text="-" 
+                                                            Command="{Binding BindingContext.RemoveSenseCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}" 
+                                                            CommandParameter="{Binding .}"
+                                                            HeightRequest="30"
+                                                            WidthRequest="30"
+                                                            Padding="0"
+                                                            Margin="0,0,5,0"
+                                                            FlexLayout.AlignSelf="Center"/>
+                                                </FlexLayout>
+                                            </VerticalStackLayout>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </VerticalStackLayout>
+                    </Border>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Equipment -->
+            <Label Text="Equipment" FontSize="20" FontAttributes="Bold" />
+            <Border Padding="5">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10,10,10,10" />
+                </Border.StrokeShape>
+                <VerticalStackLayout>
+                    <!-- Equipment Creation Form -->
+                    <Border Padding="5" BackgroundColor="#f8f8f8" Margin="0,0,0,10">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10,10,10,10" />
+                        </Border.StrokeShape>
+                        <VerticalStackLayout Spacing="5">
+                            <FlexLayout Direction="Row">
+                                <Label Text="Name:" VerticalOptions="Center" Margin="0,0,5,0"/>
+                                <Entry Placeholder="Equipment Name" Text="{Binding NewItem.Name}" FlexLayout.Grow="1"/>
+                            </FlexLayout>
+                            <FlexLayout Direction="Row">
+                                <Label Text="Quantity:" VerticalOptions="Center" Margin="0,0,5,0"/>
+                                <Entry Placeholder="Quantity" Text="{Binding NewItem.Quantity}" Keyboard="Numeric" FlexLayout.Grow="1"/>
+                            </FlexLayout>
+                            <FlexLayout Direction="Row">
+                                <Label Text="Magical:" VerticalOptions="Center" Margin="0,0,5,0"/>
+                                <Switch IsToggled="{Binding NewItem.IsMagical}" />
+                                <Label Text="Equipped:" VerticalOptions="Center" Margin="10,0,5,0"/>
+                                <Switch IsToggled="{Binding NewItem.IsEquipped}" />
+                                <Button Text="Add Item" 
+                                    Command="{Binding AddItemCommand}" 
+                                    HorizontalOptions="End" />
+                            </FlexLayout>
+                            <Label Text="Description:" VerticalOptions="Center" Margin="0,0,5,0"/>
+                            <Border>
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="10,10,10,10" />
+                                </Border.StrokeShape>
+                                <Editor Placeholder="Description" Text="{Binding NewItem.Description}" AutoSize="TextChanges"/>
+                            </Border>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Equipment Collection -->
+                    <CollectionView ItemsSource="{Binding Equipment}" SelectionMode="None">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Border Stroke="Black" Padding="5" Margin="0,5" BackgroundColor="#EEEEEE">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="10,10,10,10" />
+                                    </Border.StrokeShape>
+                                    <VerticalStackLayout>
+                                        <FlexLayout Direction="Row" HeightRequest="40">
+                                            <Label Text="Name: " Style="{StaticResource ItemLabelBold}"/>
+                                            <Label Text="{Binding Name}" Style="{StaticResource ItemLabel}" FlexLayout.Grow="1"/>
+                                        </FlexLayout>
+                                        <FlexLayout Direction="Row" HeightRequest="40">
+                                            <Label Text="Qantity: " Style="{StaticResource ItemLabelBold}"/>
+                                            <Label Text="{Binding Quantity}" Style="{StaticResource ItemLabel}" FlexLayout.Grow="1"/>
+                                        </FlexLayout>
+                                        <FlexLayout Direction="Row" HeightRequest="40">
+                                            <Label Text="Magical: " Style="{StaticResource ItemLabelBold}"/>
+                                            <Label Text="{Binding IsMagical}" Style="{StaticResource ItemLabel}" FlexLayout.Grow="1"/>
+                                        </FlexLayout>
+                                        <FlexLayout Direction="Row" HeightRequest="40">
+                                            <Label Text="Equipped: " Style="{StaticResource ItemLabelBold}"/>
+                                            <Label Text="{Binding IsEquipped}" Style="{StaticResource ItemLabel}" FlexLayout.Grow="1"/>
+                                            <Button Text="-" 
+                                                Command="{Binding BindingContext.RemoveItemCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}" 
+                                                CommandParameter="{Binding .}" 
+                                                HeightRequest="30" 
+                                                WidthRequest="80" 
+                                                HorizontalOptions="End" 
+                                                Padding="0"/>
+                                        </FlexLayout>
+                                        <Border Background="White" Padding="5">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="10,10,10,10" />
+                                            </Border.StrokeShape>
+                                            <Label Text="{Binding Description}" FontAttributes="Italic" />
+                                        </Border>
+                                    </VerticalStackLayout>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Resources -->
+            <Label Text="Resources" FontSize="20" FontAttributes="Bold" />
+            <Border Padding="5">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10,10,10,10" />
+                </Border.StrokeShape>
+                <VerticalStackLayout>
+                    <!-- Resource Creation Form -->
+                    <Border Padding="5" BackgroundColor="#f8f8f8" Margin="0,0,0,10">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10,10,10,10" />
+                        </Border.StrokeShape>
+                        <VerticalStackLayout Spacing="5">
+                            <VerticalStackLayout>
+                                <FlexLayout Direction="Row">
+                                    <Label Text="Name:" VerticalOptions="Center" Margin="0,0,5,0"/>
+                                    <Entry Text="{Binding NewResourceName}" Placeholder="Enter resource name" TextChanged="OnNameTextChanged" />
+                                </FlexLayout>
+                                <!-- Suggestion List -->
+                                <Border Padding="5">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="5"/>
+                                    </Border.StrokeShape>
+                                    <CollectionView 
+                                                    ItemsSource="{Binding Source={x:Reference CreateEnemyPageRoot}, Path=BindingContext.SuggestedResourceNames}" 
+                                                    SelectionMode="Single">
+                                        <CollectionView.ItemTemplate>
+                                            <DataTemplate>
+                                                <VerticalStackLayout>
+                                                    <Label Text="{Binding .}" Padding="5" BackgroundColor="#f0f0f0">
+                                                        <Label.GestureRecognizers>
+                                                            <TapGestureRecognizer 
+                                                    Command="{Binding Source={x:Reference CreateEnemyPageRoot}, Path=BindingContext.SelectSuggestionCommand}" 
+                                                    CommandParameter="{Binding .}" />
+                                                        </Label.GestureRecognizers>
+                                                    </Label>
+                                                    <BoxView HeightRequest="1"/>
+                                                </VerticalStackLayout>
+                                            </DataTemplate>
+                                        </CollectionView.ItemTemplate>
+                                    </CollectionView>
+                                </Border>
+                            </VerticalStackLayout>
+                            <FlexLayout Direction="Row">
+                                <Label Text="Max:" VerticalOptions="Center" Margin="0,0,5,0"/>
+                                <Entry Placeholder="Maximum Value" Text="{Binding NewResource.Max}" Keyboard="Numeric" FlexLayout.Grow="1"/>
+                            </FlexLayout>
+                            <Button Text="Add Resource" 
+                                    Command="{Binding AddResourceCommand}" 
+                                    HorizontalOptions="End" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Resource Collection -->
+                    <CollectionView ItemsSource="{Binding Resources}" SelectionMode="None">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Border Stroke="Black" Padding="5" Margin="0,5" BackgroundColor="#EEEEEE">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="10,10,10,10" />
+                                    </Border.StrokeShape>
+                                    <VerticalStackLayout>
+                                        <FlexLayout Direction="Row" HeightRequest="40">
+                                            <Label Text="Name: " Style="{StaticResource ItemLabelBold}"/>
+                                            <Label Text="{Binding Name}" Style="{StaticResource ItemLabel}" FlexLayout.Grow="1"/>
+                                        </FlexLayout>
+                                        <FlexLayout Direction="Row" HeightRequest="40">
+                                            <Label Text="Max: " Style="{StaticResource ItemLabelBold}"/>
+                                            <Label Text="{Binding Max}" Style="{StaticResource ItemLabel}" FlexLayout.Grow="1"/>
+                                        </FlexLayout>
+                                        <FlexLayout Direction="Row" HorizontalOptions="Center">
+                                            <Button Text="Edit" Command="{Binding BindingContext.EditResourceCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}" CommandParameter="{Binding .}" HorizontalOptions="Start"/>
+                                            <Button Text="Remove" Command="{Binding BindingContext.RemoveResourceCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}" CommandParameter="{Binding .}" HorizontalOptions="End" FlexLayout.Grow="1"/>
+                                        </FlexLayout>
+                                    </VerticalStackLayout>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Attacks -->
+            <Label Text="Attacks" FontSize="20" FontAttributes="Bold" />
+            <Border Padding="5">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10,10,10,10" />
+                </Border.StrokeShape>
+                <VerticalStackLayout>
+                    <!-- Attack Creation Form -->
+                    <Border Padding="5" BackgroundColor="#f8f8f8" Margin="0,0,0,10">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10,10,10,10" />
+                        </Border.StrokeShape>
+                        <VerticalStackLayout Spacing="5">
+                            <FlexLayout Direction="Row">
+                                <Label Text="Name:" VerticalOptions="Center" Margin="0,0,5,0" />
+                                <Entry Text="{Binding NewAttack.Name}" Placeholder="Enter attack name" FlexLayout.Grow="1"/>
+                            </FlexLayout>
+                            <FlexLayout Direction="Row">
+                                <Label Text="Bonus:" VerticalOptions="Center" Margin="0,0,5,0" />
+                                <Entry Text="{Binding NewAttack.Bonus}" Placeholder="Enter attack bonus" Keyboard="Numeric" FlexLayout.Grow="1"/>
+                            </FlexLayout>
+
+                            <!-- DiceRoller -->
+                            <FlexLayout Direction="Row">
+                                <Label Text="Dice Rolls:" FontAttributes="Bold" VerticalOptions="Center" Margin="0,0,10,0" />
+                                <Button Text="+" Command="{Binding AddDiceRollCommand}" HeightRequest="30" Padding="0" />
+                            </FlexLayout>
+                            
+                            <CollectionView ItemsSource="{Binding NewAttack.DiceRoller.DiceRolls}" SelectionMode="None">
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Stroke="Gray" Padding="5" Margin="0,5" BackgroundColor="#EEEEEE">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="5" />
+                                            </Border.StrokeShape>
+                                            <VerticalStackLayout>
+                                                <FlexLayout Direction="Row">
+                                                    <Label Text="Name:" Style="{StaticResource ItemLabelBold}" Margin="0,0,5,0"/>
+                                                    <Label Text="{Binding Roll.Name}" FlexLayout.Grow="1" Style="{StaticResource ItemLabel}" Margin="0,0,5,0"/>
+                                                </FlexLayout>
+                                                <FlexLayout Direction="Row">
+                                                    <Label Text="Special Modifier:" Style="{StaticResource ItemLabelBold}" />
+                                                    <Label Text="{Binding Special}" FlexLayout.Grow="1" Style="{StaticResource ItemLabel}"/>
+                                                </FlexLayout>
+                                                <BoxView HeightRequest="1"/>
+                                                <FlexLayout Direction="Row" Margin="0,10,0,10" HorizontalOptions="Center">
+                                                    <Label Text="Roll: " Style="{StaticResource RollLabelBold}"/>
+                                                    <Label Text="{Binding Roll.NumberOfDice}" Style="{StaticResource RollLabel}"/>
+                                                    <Label Text="d" Style="{StaticResource RollLabelBold}"/>
+                                                    <Label Text="{Binding Roll.DiceSize}" Style="{StaticResource RollLabel}" />
+                                                    <Label Text="+" Style="{StaticResource RollLabelBold}"/>
+                                                    <Label Text="{Binding Roll.Modifier}" Style="{StaticResource RollLabel}" />
+                                                </FlexLayout>
+                                                <BoxView HeightRequest="1" Margin="0,0,0,10"/>
+                                                <FlexLayout Direction="Row">
+                                                    <Button Text="Edit" Command="{Binding BindingContext.EditDiceRollCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}" CommandParameter="{Binding .}" Padding="1" HeightRequest="30" Margin="0,0,5,0"/>
+                                                    <Button Text="Remove" Command="{Binding BindingContext.RemoveDiceRollCommand, Source={RelativeSource AncestorType={x:Type ContentPage}}}" CommandParameter="{Binding .}" Padding="1" HeightRequest="30"/>
+                                                </FlexLayout>
+                                            </VerticalStackLayout>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                            
+
+                            <Button Text="Add Attack" Command="{Binding AddAttackCommand}" HorizontalOptions="End" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <!-- Attack Collection -->
+                    <CollectionView ItemsSource="{Binding Attacks}" SelectionMode="None">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Border Stroke="Black" Padding="5" Margin="0,5" BackgroundColor="#EEEEEE">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="10,10,10,10" />
+                                    </Border.StrokeShape>
+                                    <VerticalStackLayout>
+                                        <FlexLayout Direction="Row" HeightRequest="40">
+                                            <Label Text="Name: " Style="{StaticResource ItemLabelBold}" />
+                                            <Label Text="{Binding Name}" Style="{StaticResource ItemLabel}" FlexLayout.Grow="1" />
+                                        </FlexLayout>
+                                        <FlexLayout Direction="Row" HeightRequest="40">
+                                            <Label Text="Bonus: " Style="{StaticResource ItemLabelBold}" />
+                                            <Label Text="{Binding Bonus}" Style="{StaticResource ItemLabel}" FlexLayout.Grow="1" />
+                                        </FlexLayout>
+                                        <Label Text="Dice Rolls:" FontAttributes="Bold" />
+                                        <CollectionView ItemsSource="{Binding DiceRoller.DiceRolls}" SelectionMode="None">
+                                            <CollectionView.ItemTemplate>
+                                                <DataTemplate>
+                                                    <Border Stroke="Gray" Padding="5" Margin="0,5" BackgroundColor="White">
+                                                        <Border.StrokeShape>
+                                                            <RoundRectangle CornerRadius="5" />
+                                                        </Border.StrokeShape>
+                                                        <VerticalStackLayout>
+                                                            <FlexLayout Direction="Row">
+                                                                <Label Text="Name:" Style="{StaticResource ItemLabelBold}" Margin="0,0,5,0"/>
+                                                                <Label Text="{Binding Roll.Name}" FlexLayout.Grow="1" Style="{StaticResource ItemLabel}" Margin="0,0,5,0"/>
+                                                            </FlexLayout>
+                                                            <FlexLayout Direction="Row">
+                                                                <Label Text="Special Modifier:" Style="{StaticResource ItemLabelBold}" />
+                                                                <Label Text="{Binding Special}" FlexLayout.Grow="1" Style="{StaticResource ItemLabel}"/>
+                                                            </FlexLayout>
+                                                            <BoxView HeightRequest="1"/>
+                                                            <FlexLayout Direction="Row" Margin="0,10,0,10" HorizontalOptions="Center">
+                                                                <Label Text="Roll: " Style="{StaticResource RollLabelBold}"/>
+                                                                <Label Text="{Binding Roll.NumberOfDice}" Style="{StaticResource RollLabel}"/>
+                                                                <Label Text="d" Style="{StaticResource RollLabelBold}"/>
+                                                                <Label Text="{Binding Roll.DiceSize}" Style="{StaticResource RollLabel}" />
+                                                                <Label Text="+" Style="{StaticResource RollLabelBold}"/>
+                                                                <Label Text="{Binding Roll.Modifier}" Style="{StaticResource RollLabel}" />
+                                                            </FlexLayout>
+                                                            <BoxView HeightRequest="1" Margin="0,0,0,10"/>
+                                                        </VerticalStackLayout>
+                                                    </Border>
+                                                </DataTemplate>
+                                            </CollectionView.ItemTemplate>
+                                        </CollectionView>
+                                    </VerticalStackLayout>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </VerticalStackLayout>
+            </Border>
+
+
+
+            <!-- Submit Button -->
+            <Button Text="Create Enemy" Command="{Binding CreateEnemyCommand}" Margin="0,50,0,0" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="DndManager.Compontents.SelectSessionPopup"
+             xmlns:converters="clr-namespace:DndManager.Converters">
+    <toolkit:Popup.Resources>
+        <ResourceDictionary>
+            <converters:ValueToStringConverter x:Key="ValueToStringConverter" />
+            <Style x:Key="CenteredBoldLabelStyle" TargetType="Label">
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="Margin" Value="0,0,0,1"/>
+            </Style>
+            <Style x:Key="AbilityScoreEntryStyle" TargetType="Entry">
+                <Setter Property="Keyboard" Value="Numeric" />
+                <Setter Property="MaximumWidthRequest" Value="40" />
+                <Setter Property="HorizontalTextAlignment" Value="Center" />
+                <Setter Property="MaxLength" Value="2" />
+            </Style>
+            <Style x:Key="ItemLabel" TargetType="Label">
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="Margin" Value="0,0,0,0"/>
+            </Style>
+            <Style x:Key="ItemLabelBold" TargetType="Label">
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="Margin" Value="0,0,0,0"/>
+            </Style>
+        </ResourceDictionary>
+    </toolkit:Popup.Resources>
+    <VerticalStackLayout>
+        <Label Text="Select Session" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" />
+        <ScrollView Padding="5">
+            <Border Margin="5" BackgroundColor="White" Padding="5,0,5,0">
+                <CollectionView ItemsSource="{Binding Endpoints}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border Stroke="Black" Padding="5" Margin="0,5" BackgroundColor="#EEEEEE">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="10,10,10,10" />
+                                </Border.StrokeShape>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type toolkit:Popup}}, Path=BindingContext.SessionTappedCommand}" CommandParameter="{Binding .}" />
+                                </Border.GestureRecognizers>
+                                <VerticalStackLayout>
+                                    <FlexLayout Direction="Row" HeightRequest="40">
+                                        <Label Text="Name: " Style="{StaticResource ItemLabelBold}"/>
+                                        <Label Text="{Binding Value, Converter={StaticResource ValueToStringConverter}}" Style="{StaticResource ItemLabel}" FlexLayout.Grow="1"/>
+                                    </FlexLayout>
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Border>
+        </ScrollView>
+    </VerticalStackLayout>
+    
+</toolkit:Popup>

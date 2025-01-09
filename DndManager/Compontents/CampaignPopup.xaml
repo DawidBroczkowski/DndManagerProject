@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+               xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+               xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+               x:Class="DndManager.Compontents.CampaignPopup">
+
+    <Grid WidthRequest="380" HeightRequest="500" Padding="20" BackgroundColor="White">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Label Text="Create Campaign" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center" Grid.Row="0" />
+
+        <Border Margin="10,0,10,20" Grid.Row="1">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="10,10,10,10" />
+            </Border.StrokeShape>
+            <Entry Placeholder="Name" Text="{Binding Name}" />
+        </Border>
+
+        <Border VerticalOptions="Fill" Margin="10,0,10,0" Grid.Row="2" Padding="10">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="40,10,10,0" />
+            </Border.StrokeShape>
+            <Editor Placeholder="Description" Text="{Binding Description}"/>
+        </Border>
+
+        <Grid Grid.Row="3" ColumnSpacing="10" Margin="0,10,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Text="Cancel" Command="{Binding CancelCommand}" Grid.Column="1" />
+            <Button Text="Create" Command="{Binding CreateCommand}" Grid.Column="2" />
+        </Grid>
+    </Grid>
+</toolkit:Popup>

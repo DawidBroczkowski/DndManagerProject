@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:DndManager.Converters"
+             x:Name="EncounterPageRoot"
+             x:Class="DndManager.Pages.EncounterPage"
+             Title="EncounterPage">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            <converters:NegBooleanToVisibilityConverter x:Key="NegBooleanToVisibilityConverter" />
+            <converters:CharacterConditionConverter x:Key="CharacterConditionConverter" />
+            <Style x:Key="CenteredBoldLabelStyle" TargetType="Label">
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="Margin" Value="0,0,0,1"/>
+            </Style>
+            <Style x:Key="CenteredLabelStyle" TargetType="Label">
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="Margin" Value="5,0,0,1"/>
+            </Style>
+            <Style x:Key="AbilityScoreEntryStyle" TargetType="Entry">
+                <Setter Property="Keyboard" Value="Numeric" />
+                <Setter Property="MaximumWidthRequest" Value="40" />
+                <Setter Property="HorizontalTextAlignment" Value="Center" />
+                <Setter Property="MaxLength" Value="2" />
+            </Style>
+            <Style x:Key="ItemLabel" TargetType="Label">
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="Margin" Value="0,0,0,0"/>
+            </Style>
+            <Style x:Key="ItemLabelBold" TargetType="Label">
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="Margin" Value="0,0,0,0"/>
+            </Style>
+            <Style x:Key="BigLabelBold" TargetType="Label">
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="Margin" Value="0,0,0,0"/>
+                <Setter Property="FontSize" Value="20"/>
+            </Style>
+            <Style x:Key="BigLabel" TargetType="Label">
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="Margin" Value="0,0,0,0"/>
+                <Setter Property="FontSize" Value="20"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ScrollView>
+        <VerticalStackLayout>
+            <Label Text="Encounter" FontSize="20" HorizontalOptions="Center"/>
+            <Button Text="Roll initiative" Command="{Binding RollInitiativeCommand}" HorizontalOptions="Center" IsVisible="{Binding InitiativeIsRolled, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+            <Button Text="Next Turn" Command="{Binding NextTurnCommand}" HorizontalOptions="Center" IsVisible="{Binding InitiativeIsRolled, Converter={StaticResource NegBooleanToVisibilityConverter}}"/>
+            <Border Padding="5" Background="#EEEEEE">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="10"/>
+                </Border.StrokeShape>
+                <CollectionView ItemsSource="{Binding Characters}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Border Padding="5" Margin="0,5" BackgroundColor="White">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="10,10,10,10" />
+                                </Border.StrokeShape>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.PlayerTappedCommand}" CommandParameter="{Binding .}" />
+                                </Border.GestureRecognizers>
+                                <VerticalStackLayout>
+                                    <Border Padding="5" Margin="5" Stroke="Green" IsVisible="{Binding IsCurrentTurn, Converter={StaticResource NegBooleanToVisibilityConverter}}">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="20"/>
+                                        </Border.StrokeShape>
+                                        <Label Text="Current Turn" HorizontalOptions="Center" VerticalOptions="Center" TextColor="Green"/>
+                                    </Border>
+                                    <Label Text="Character: " Style="{StaticResource ItemLabelBold}"/>
+                                    <Border Background="White" Padding="5" Margin="0,0,0,5">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="10,10,10,10" />
+                                        </Border.StrokeShape>
+                                        <VerticalStackLayout>
+                                            <FlexLayout Direction="Row" VerticalOptions="Center">
+                                                <Label Text="Name:" Style="{StaticResource CenteredBoldLabelStyle}"/>
+                                                <Entry Text="{Binding Character.Name}" FlexLayout.Grow="1" IsReadOnly="{Binding IsPlayerCharacter}"/>
+                                            </FlexLayout>
+                                            <BoxView HeightRequest="1" BackgroundColor="Gray" />
+                                            <FlexLayout Direction="Row" VerticalOptions="Center">
+                                                <Label Text="Initiative:" Style="{StaticResource CenteredBoldLabelStyle}"/>
+                                                <Label Text="{Binding Initiative}" Style="{StaticResource CenteredLabelStyle}" FlexLayout.Grow="2"/>
+                                            </FlexLayout>
+                                            <BoxView HeightRequest="1" BackgroundColor="Gray" />
+                                            <FlexLayout Direction="Row" VerticalOptions="Center">
+                                                <Label Text="Race:" Style="{StaticResource CenteredBoldLabelStyle}"/>
+                                                <Entry Text="{Binding Character.Race}" FlexLayout.Grow="8" IsReadOnly="{Binding IsPlayerCharacter}"/>
+                                            </FlexLayout>
+                                            <BoxView HeightRequest="1" BackgroundColor="Gray" />
+                                            <FlexLayout Direction="Row" VerticalOptions="Center">
+                                                <Label Text="Class:" Style="{StaticResource CenteredBoldLabelStyle}"/>
+                                                <Entry Text="{Binding Character.Class}" FlexLayout.Grow="8" IsReadOnly="{Binding IsPlayerCharacter}"/>
+                                            </FlexLayout>
+                                            <BoxView HeightRequest="1" BackgroundColor="Gray" />
+                                            <FlexLayout Direction="Row" VerticalOptions="Center">
+                                                <Label Text="Subclass:" Style="{StaticResource CenteredBoldLabelStyle}"/>
+                                                <Entry Text="{Binding Character.Subclass}" FlexLayout.Grow="2" IsReadOnly="{Binding IsPlayerCharacter}"/>
+                                            </FlexLayout>
+                                            <BoxView HeightRequest="1" BackgroundColor="Gray" />
+                                            <FlexLayout Direction="Row" VerticalOptions="Center">
+                                                <Label Text="Level:" Style="{StaticResource CenteredBoldLabelStyle}"/>
+                                                <Entry Text="{Binding Character.Level}" HorizontalTextAlignment="Center" Style="{StaticResource CenteredLabelStyle}" IsReadOnly="{Binding IsPlayerCharacter}"/>
+                                            </FlexLayout>
+                                            <BoxView HeightRequest="1" BackgroundColor="Gray" />
+                                            <FlexLayout Direction="Row" VerticalOptions="Center">
+                                                <Label Text="HP:" Style="{StaticResource CenteredBoldLabelStyle}"/>
+                                                <Entry Text="{Binding Character.HitPoints}" Style="{StaticResource CenteredLabelStyle}" IsReadOnly="{Binding IsPlayerCharacter}"/>
+                                                <Label Text="/" Margin="4,0,4,0" Style="{StaticResource CenteredBoldLabelStyle}"/>
+                                                <Entry Text="{Binding Character.HitPointsMax}" Style="{StaticResource CenteredLabelStyle}" IsReadOnly="{Binding IsPlayerCharacter}"/>
+                                                <Label Text="+" Margin="4,0,4,0" Style="{StaticResource CenteredBoldLabelStyle}"/>
+                                                <Entry Text="{Binding Character.HitPointsTemporary}" Style="{StaticResource CenteredLabelStyle}" IsReadOnly="{Binding IsPlayerCharacter}"/>
+                                            </FlexLayout>
+                                            <FlexLayout Direction="Row" VerticalOptions="Center">
+                                                <Label Text="AC:" Style="{StaticResource CenteredBoldLabelStyle}"/>
+                                                <Label Text="{Binding Character.ArmorClass}" Style="{StaticResource CenteredLabelStyle}" FlexLayout.Grow="2"/>
+                                            </FlexLayout>
+                                            <BoxView HeightRequest="1" BackgroundColor="Gray" />
+                                            <BoxView HeightRequest="1" BackgroundColor="Gray" />
+                                            <FlexLayout Direction="Row" VerticalOptions="Center">
+                                                <Label Text="Background:" Style="{StaticResource CenteredBoldLabelStyle}"/>
+                                                <Label Text="{Binding Character.Background}" Style="{StaticResource CenteredLabelStyle}" FlexLayout.Grow="2"/>
+                                            </FlexLayout>
+                                            <BoxView HeightRequest="1" BackgroundColor="Gray" />
+                                            <Label Text="Death saving throws:" Style="{StaticResource CenteredBoldLabelStyle}"/>
+                                            <FlexLayout Direction="Row" VerticalOptions="Center">
+                                                <Label Text="Success:" Style="{StaticResource CenteredBoldLabelStyle}"/>
+                                                <Label Text="{Binding Character.DeathSavesSuccesses}" Style="{StaticResource CenteredLabelStyle}"/>
+                                                <Label Text="/" Margin="4,0,4,0" Style="{StaticResource CenteredBoldLabelStyle}"/>
+                                                <Label Text="3" Margin="0,0,4,0" Style="{StaticResource CenteredBoldLabelStyle}"/>
+                                            </FlexLayout>
+                                            <FlexLayout Direction="Row" VerticalOptions="Center">
+                                                <Label Text="Failures:" Style="{StaticResource CenteredBoldLabelStyle}"/>
+                                                <Label Text="{Binding Character.DeathSavesFailures}" Style="{StaticResource CenteredLabelStyle}"/>
+                                                <Label Text="/" Margin="4,0,4,0" Style="{StaticResource CenteredBoldLabelStyle}"/>
+                                                <Label Text="3" Margin="0,0,4,0" Style="{StaticResource CenteredBoldLabelStyle}"/>
+                                            </FlexLayout>
+                                            <BoxView HeightRequest="1" BackgroundColor="Gray" />
+                                            <FlexLayout Direction="Row" VerticalOptions="Center">
+                                                <Label Text="Passive Perception:" Style="{StaticResource CenteredBoldLabelStyle}"/>
+                                                <Label Text="{Binding Character.PassivePerception}" Style="{StaticResource CenteredLabelStyle}" FlexLayout.Grow="2"/>
+                                            </FlexLayout>
+                                            <BoxView HeightRequest="1" BackgroundColor="Gray" />
+                                            <FlexLayout Direction="Row" VerticalOptions="Center">
+                                                <Label Text="Passive Insight:" Style="{StaticResource CenteredBoldLabelStyle}"/>
+                                                <Label Text="{Binding Character.PassiveInsight}" Style="{StaticResource CenteredLabelStyle}" FlexLayout.Grow="2"/>
+                                            </FlexLayout>
+                                            <BoxView HeightRequest="1" BackgroundColor="Gray" />
+                                            <Label Text="Conditions:" Style="{StaticResource CenteredBoldLabelStyle}"/>
+                                            <!-- Conditions -->
+                                            <Border Padding="5">
+                                                <Border.StrokeShape>
+                                                    <RoundRectangle CornerRadius="10,10,10,10" />
+                                                </Border.StrokeShape>
+                                                <VerticalStackLayout>
+                                                    <FlexLayout Direction="Row">
+                                                        <Label Text="Conditions" VerticalOptions="Center" Margin="0,0,0,1" FontSize="14" FontAttributes="Bold" FlexLayout.Grow="1"/>
+                                                        <BoxView WidthRequest="1" BackgroundColor="Gray" Margin="5,0,0,0"/>
+                                                        <Entry Placeholder="Add Condition" Text="{Binding NewCondition}" FlexLayout.Grow="2"/>
+                                                        <Button Text="+" 
+                                                                    Command="{Binding Source={x:Reference EncounterPageRoot}, Path=BindingContext.AddConditionCommand}"
+                                                                    HeightRequest="30"
+                                                                    WidthRequest="30"
+                                                                    Padding="0"
+                                                                    Margin="0,0,5,0"
+                                                                    FlexLayout.AlignSelf="Center"/>
+                                                    </FlexLayout>
+                                                    <BoxView HeightRequest="1" BackgroundColor="Gray" />
+                                                    <Border Margin="0,5" BackgroundColor="#EEEEEE">
+                                                        <Border.StrokeShape>
+                                                            <RoundRectangle CornerRadius="10,10,10,10" />
+                                                        </Border.StrokeShape>
+                                                        <VerticalStackLayout>
+                                                            <CollectionView ItemsSource="{Binding Conditions}" SelectionMode="None">
+                                                                <CollectionView.ItemTemplate>
+                                                                    <DataTemplate>
+                                                                        <Border Padding="3">
+                                                                            <Border.StrokeShape>
+                                                                                <RoundRectangle CornerRadius="10,10,10,10" />
+                                                                            </Border.StrokeShape>
+                                                                            <VerticalStackLayout>
+                                                                                <FlexLayout Direction="Row" HeightRequest="40">
+                                                                                    <Label Text="{Binding .}" VerticalOptions="Center" FlexLayout.Grow="1" Margin="2,0,0,0"/>
+                                                                                    <Button Text="-" 
+                                                                                                Command="{Binding Source={x:Reference EncounterPageRoot}, Path=BindingContext.RemoveConditionCommand}" >
+                                                                                        <Button.CommandParameter>
+                                                                                            <MultiBinding Converter="{StaticResource CharacterConditionConverter}">
+                                                                                                <!-- Pass the Character -->
+                                                                                                <Binding Path="BindingContext" Source="{RelativeSource AncestorType={x:Type Border}}" />
+                                                                                                <!-- Pass the Condition -->
+                                                                                                <Binding Path="." />
+                                                                                            </MultiBinding>
+                                                                                        </Button.CommandParameter>
+                                                                                    </Button>
+                                                                                </FlexLayout>
+                                                                            </VerticalStackLayout>
+                                                                        </Border>
+                                                                    </DataTemplate>
+                                                                </CollectionView.ItemTemplate>
+                                                            </CollectionView>
+                                                        </VerticalStackLayout>
+                                                    </Border>
+                                                </VerticalStackLayout>
+                                            </Border>
+                                        </VerticalStackLayout>
+                                    </Border>
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Border>
+            <Button Text="End Encounter" Command="{Binding EndEncounterCommand}" HorizontalOptions="Center"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

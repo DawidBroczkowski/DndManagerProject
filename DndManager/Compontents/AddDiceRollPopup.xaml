@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<toolkit:Popup xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DndManager.Compontents.AddDiceRollPopup"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit">
+
+    <toolkit:Popup.Resources>
+        <ResourceDictionary>
+            <Style x:Key="CenteredBoldLabelStyle" TargetType="Label">
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="Margin" Value="0,0,0,1"/>
+            </Style>
+            <Style x:Key="AbilityScoreEntryStyle" TargetType="Entry">
+                <Setter Property="Keyboard" Value="Numeric" />
+                <Setter Property="MaximumWidthRequest" Value="40" />
+                <Setter Property="HorizontalTextAlignment" Value="Center" />
+                <Setter Property="MaxLength" Value="2" />
+            </Style>
+            <Style x:Key="ItemLabel" TargetType="Label">
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="Margin" Value="0,0,5,0"/>
+                <Setter Property="FontSize" Value="20"/>
+            </Style>
+            <Style x:Key="ItemLabelBold" TargetType="Label">
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="Margin" Value="0,0,5,0"/>
+                <Setter Property="FontSize" Value="20"/>
+            </Style>
+            <Style x:Key="EntryStyle" TargetType="Entry">
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="HorizontalOptions" Value="Center"/>
+                <Setter Property="HorizontalTextAlignment" Value="Center"/>
+                <Setter Property="Margin" Value="0,1,5,0"/>
+                <Setter Property="FontSize" Value="20"/>
+            </Style>
+        </ResourceDictionary>
+    </toolkit:Popup.Resources>
+
+    <VerticalStackLayout>
+        <Label Text="Add a dice roll" FontSize="20" HorizontalOptions="Center" FontAttributes="Bold"/>
+        <Border Margin="5" Padding="5" Background="White" MinimumHeightRequest="200">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="10,10,10,10" />
+            </Border.StrokeShape>
+
+            <VerticalStackLayout>
+                <FlexLayout Direction="Row" Margin="0,0,0,10">
+                    <Label Text="Name: " Style="{StaticResource ItemLabelBold}"/>
+                    <Entry Text="{Binding DiceRoll.Name}" Style="{StaticResource ItemLabel}" FlexLayout.Grow="1"/>
+                </FlexLayout>
+                <BoxView HeightRequest="1"/>
+                <FlexLayout Direction="Row" HorizontalOptions="Center">
+                    <Label Text="Roll: " Style="{StaticResource ItemLabelBold}"/>
+                    <Entry Text="{Binding DiceRoll.NumberOfDice}" Style="{StaticResource EntryStyle}" Keyboard="Numeric"/>
+                    <Label Text="d" Style="{StaticResource ItemLabelBold}"/>
+                    <Entry Text="{Binding DiceRoll.DiceSize}" Style="{StaticResource EntryStyle}" Keyboard="Numeric"/>
+                    <Label Text="+" Style="{StaticResource ItemLabelBold}"/>
+                    <Entry Text="{Binding DiceRoll.Modifier}" Style="{StaticResource EntryStyle}" Keyboard="Numeric"/>
+                </FlexLayout>
+                <BoxView HeightRequest="1" Margin="0,0,0,20"/>
+                <Button Text="Add" Command="{Binding AddDiceRollCommand}" HorizontalOptions="Center"/>
+            </VerticalStackLayout>
+        </Border>
+    </VerticalStackLayout>
+</toolkit:Popup>

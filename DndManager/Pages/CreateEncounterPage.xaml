@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DndManager.Pages.CreateEncounterPage"
+             Title="CreateEncounterPage"
+             x:Name="CreateEncounterPageRoot">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <Style x:Key="CenteredBoldLabelStyle" TargetType="Label">
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="Margin" Value="0,0,0,1"/>
+            </Style>
+            <Style x:Key="AbilityScoreEntryStyle" TargetType="Entry">
+                <Setter Property="Keyboard" Value="Numeric" />
+                <Setter Property="MaximumWidthRequest" Value="40" />
+                <Setter Property="HorizontalTextAlignment" Value="Center" />
+                <Setter Property="MaxLength" Value="2" />
+            </Style>
+            <Style x:Key="ItemLabel" TargetType="Label">
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="Margin" Value="0,0,0,0"/>
+            </Style>
+            <Style x:Key="ItemLabelBold" TargetType="Label">
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="FontAttributes" Value="Bold" />
+                <Setter Property="Margin" Value="0,0,0,0"/>
+            </Style>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <VerticalStackLayout>
+            <Label Text="Create Encounter" FontSize="Title" HorizontalOptions="Center" />
+            <Border Padding="10" Margin="10,0,10,10" Background="#EEEEEE">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="5"/>
+                </Border.StrokeShape>
+                <VerticalStackLayout>
+                    <FlexLayout Direction="Row" HeightRequest="40">
+                        <Label Text="Name: " Style="{StaticResource ItemLabelBold}" />
+                        <Entry Text="{Binding Encounter.Name}" Style="{StaticResource ItemLabel}" FlexLayout.Grow="1"/>
+                    </FlexLayout>
+                    <BoxView HeightRequest="1"/>
+                    <Label Text="Description: " Style="{StaticResource ItemLabelBold}"/>
+                    <Border Background="White" Padding="10">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="10,10,10,10" />
+                        </Border.StrokeShape>
+                        <Editor Placeholder="Description" Text="{Binding Encounter.Description}" Style="{StaticResource ItemLabel}" AutoSize="TextChanges"/>
+                    </Border>
+                </VerticalStackLayout>
+            </Border>
+
+            <Border Padding="10" Margin="10,0,10,10" Background="#EEEEEE">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="5"/>
+                </Border.StrokeShape>
+                <!-- Enemy Add Form -->
+                <Border Padding="5" BackgroundColor="#f8f8f8" Margin="0,0,0,10">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="10,10,10,10" />
+                    </Border.StrokeShape>
+                    <VerticalStackLayout Spacing="5">
+                        <VerticalStackLayout>
+                            <FlexLayout Direction="Row">
+                                <Label Text="Name:" VerticalOptions="Center" Margin="0,0,5,0"/>
+                                <Entry Text="{Binding EnemyName}" Placeholder="Enter enemy name"/>
+                            </FlexLayout>
+                            <!-- Suggestion List -->
+                            <Border Padding="5">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="5"/>
+                                </Border.StrokeShape>
+                                <CollectionView ItemsSource="{Binding Source={x:Reference CreateEncounterPageRoot}, Path=BindingContext.FilteredEnemies}">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <VerticalStackLayout>
+                                                <FlexLayout Direction="Row">
+                                                    <Label Text="{Binding Name}" Padding="5" BackgroundColor="#f0f0f0"/>
+                                                    <Button Text="+" Command="{Binding Source={x:Reference CreateEncounterPageRoot},
+                                                            Path=BindingContext.AddEnemyCommand}" CommandParameter="{Binding .}" HorizontalOptions="End"
+                                                            Padding="0" HeightRequest="30"/>
+                                                </FlexLayout>
+                                                <BoxView HeightRequest="1"/>
+                                            </VerticalStackLayout>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                </CollectionView>
+                            </Border>
+                        </VerticalStackLayout>
+
+                        <!-- Enemy Collection -->
+                        <CollectionView ItemsSource="{Binding Encounter.Characters}" SelectionMode="None">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Stroke="Black" Padding="5" Margin="0,5" BackgroundColor="#EEEEEE">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="10,10,10,10" />
+                                        </Border.StrokeShape>
+                                        <VerticalStackLayout>
+                                            <FlexLayout Direction="Row" HeightRequest="40">
+                                                <Label Text="Name: " Style="{StaticResource ItemLabelBold}"/>
+                                                <Label Text="{Binding Name}" Style="{StaticResource ItemLabel}" FlexLayout.Grow="1"/>
+                                                <Button Text="-" Command="{Binding BindingContext.RemoveEnemyCommand,
+                                                        Source={RelativeSource AncestorType={x:Type ContentPage}}}" CommandParameter="{Binding .}" 
+                                                        HorizontalOptions="End" FlexLayout.Grow="1" Padding="0" HeightRequest="30"/>
+                                            </FlexLayout>
+                                            <BoxView HeightRequest="1"/>
+                                            <FlexLayout Direction="Row" HorizontalOptions="Center">
+                                                <Label Text="Level: " Style="{StaticResource ItemLabelBold}"/>
+                                                <Label Text="{Binding Character.Level}" Style="{StaticResource ItemLabel}"/>
+                                                <BoxView WidthRequest="1" Margin="5,0,5,0"/>
+                                                <Label Text="HP: " Style="{StaticResource ItemLabelBold}"/>
+                                                <Label Text="{Binding Character.HitPointsMax}" Style="{StaticResource ItemLabel}"/>
+                                                <BoxView WidthRequest="1" Margin="5,0,5,0"/>
+                                                <Label Text="Race: " Style="{StaticResource ItemLabelBold}"/>
+                                                <Label Text="{Binding Character.Race}" Style="{StaticResource ItemLabel}" FlexLayout.Grow="1"/>
+                                            </FlexLayout>
+                                            <BoxView HeightRequest="1"/>
+                                            <FlexLayout Direction="Row" HorizontalOptions="Center">
+                                                <Label Text="AC: " Style="{StaticResource ItemLabelBold}" />
+                                                <Label Text="{Binding Character.ArmorClass}" Style="{StaticResource ItemLabel}"/>
+                                                <BoxView WidthRequest="1" Margin="5,0,5,0"/>
+                                                <Label Text="Speed: " Style="{StaticResource ItemLabelBold}"/>
+                                                <Label Text="{Binding Character.Speed}" Style="{StaticResource ItemLabel}" FlexLayout.Grow="1"/>
+                                            </FlexLayout>
+                                        </VerticalStackLayout>
+                                    </Border>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Border>
+            </Border>
+            <Button Text="Create" HorizontalOptions="Fill" Command="{Binding CreateEncounter}"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

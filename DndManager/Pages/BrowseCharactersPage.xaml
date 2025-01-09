@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="DndManager.Pages.BrowseCharactersPage"
+             Title="BrowseCharactersPage">
+    <ScrollView>
+        <VerticalStackLayout Padding="10" Spacing="10">
+            <CollectionView ItemsSource="{Binding Characters}" SelectionMode="None" Margin="0,-10,0,0">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border Stroke="Black" BackgroundColor="#DCDCDC"  Padding="10" Margin="0,10,0,0">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="10,10,10,10" />
+                            </Border.StrokeShape>
+                            <VerticalStackLayout Padding="15" Spacing="10" >
+                                <FlexLayout Direction="Row" VerticalOptions="Center">
+                                    <Label Text= "Name: " FontAttributes="Bold"/>
+                                    <Label Text= "{Binding Name}" />
+                                </FlexLayout>
+                                <BoxView HeightRequest="1" BackgroundColor="Gray" />
+                                <FlexLayout Direction="Row" VerticalOptions="Center">
+                                    <Label Text= "Class: " FontAttributes="Bold"/>
+                                    <Label Text= "{Binding Class}" />
+                                </FlexLayout>
+                                <BoxView HeightRequest="1" BackgroundColor="Gray" />
+                                <FlexLayout Direction="Row" VerticalOptions="Center">
+                                    <Label Text= "Level: " FontAttributes="Bold"/>
+                                    <Label Text= "{Binding Level}" />
+                                </FlexLayout>
+                                <BoxView HeightRequest="1" BackgroundColor="Gray" />
+                                <FlexLayout Direction="Row" VerticalOptions="Center" HorizontalOptions="Center">
+                                    <Button
+                                        Text="Go to the character sheet"
+                                        HeightRequest="40"
+                                        WidthRequest="180"
+                                        Padding="0"
+                                        Margin="0,5,0,0"
+                                        FlexLayout.AlignSelf="Center"
+                                        Command="{Binding BindingContext.CharacterCard, Source={RelativeSource AncestorType={x:Type ContentPage}}, ConverterParameter={Binding .}}"
+                                        CommandParameter="{Binding .}" />
+                                </FlexLayout>
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
